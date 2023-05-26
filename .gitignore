@@ -1,0 +1,6 @@
+.DS_Store
+bin/
+.env
+.vscode
+logs/*
+!.keep
