@@ -2,36 +2,43 @@ package logger
 
 import (
 	"fmt"
+	"io"
 	"os"
 	"time"
 
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
+	"golang.org/x/exp/slog"
 )
 
-var logger *zap.Logger
+var logger *slog.Logger
 
 func Initialize() {
-	config := zap.NewProductionEncoderConfig()
-	config.EncodeTime = zapcore.ISO8601TimeEncoder
-
-	fileEncoder := zapcore.NewJSONEncoder(config)
-	fileName := fmt.Sprintf("logs/log_%s.txt", time.Now().Format("20060102"))
+	fileName := fmt.Sprintf("logs/log_%s.log", time.Now().Format("20060102"))
 	logFile, _ := os.OpenFile(fileName, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	writer := zapcore.AddSync(logFile)
+	multiLogFile := io.MultiWriter(os.Stdout, logFile)
 
-	core := zapcore.NewTee(
-		zapcore.NewCore(fileEncoder, writer, zapcore.DebugLevel),
-	)
-
-	logger = zap.New(core, zap.AddCaller(), zap.AddStacktrace(zapcore.ErrorLevel))
-	defer logger.Sync()
+	h := slog.NewJSONHandler(multiLogFile, &slog.HandlerOptions{
+		Level: slog.LevelDebug,
+	})
+	logger = slog.New(h)
 }
 
-func Info(msg string, fields ...zap.Field) {
-	logger.Info(msg, fields...)
+func Debug(msg string, fields ...slog.Attr) {
+	logger.Debug(msg, "payload", slog.GroupValue(fields...))
+}
+
+func Info(msg string, fields ...slog.Attr) {
+	logger.Info(msg, "payload", slog.GroupValue(fields...))
+}
+
+func Warn(msg string, fields ...slog.Attr) {
+	logger.Warn(msg, "payload", slog.GroupValue(fields...))
+}
+
+func Error(msg string, err error) {
+	logger.Error(msg, err)
 }
 
 func Fatal(msg string, err error) {
-	logger.Fatal(msg, zap.Error(err))
+	logger.Error(msg, err)
+	os.Exit(1)
 }

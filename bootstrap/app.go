@@ -3,14 +3,12 @@ package bootstrap
 import (
 	"backend/utils/logger"
 
-	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
 type Application struct {
-	Env    *Env
-	DB     *gorm.DB
-	Logger *zap.Logger
+	Env *Env
+	DB  *gorm.DB
 }
 
 func NewApp() *Application {
