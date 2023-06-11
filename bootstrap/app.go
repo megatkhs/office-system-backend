@@ -6,15 +6,15 @@ import (
 	"gorm.io/gorm"
 )
 
-type Application struct {
+type App struct {
 	Env *Env
 	DB  *gorm.DB
 }
 
-func NewApp() *Application {
+func NewApp() *App {
 	logger.Initialize()
 
-	app := Application{}
+	app := App{}
 
 	app.Env = NewEnv()
 	app.DB = NewDB(app.Env)
@@ -22,6 +22,6 @@ func NewApp() *Application {
 	return &app
 }
 
-func (app *Application) CloseDB() {
+func (app *App) CloseDB() {
 	CloseDB(app.DB)
 }

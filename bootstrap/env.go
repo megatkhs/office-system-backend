@@ -15,6 +15,7 @@ type Env struct {
 	DBName     string
 	DBPort     string
 	DBHost     string
+	APIPort    string
 }
 
 func NewEnv() *Env {
@@ -30,6 +31,7 @@ func NewEnv() *Env {
 	env.DBName = os.Getenv("DB_NAME")
 	env.DBPort = os.Getenv("DB_PORT")
 	env.DBHost = os.Getenv("DB_HOST")
+	env.APIPort = os.Getenv("API_PORT")
 
 	logger.Info(fmt.Sprintf("%sモードで動作中", env.AppEnv))
 
