@@ -20,10 +20,10 @@ func NewEmployeeController(tu usecase.EmployeeUsecase) EmployeeController {
 }
 
 func (ec *employeeController) GetAllEmployees(c *fiber.Ctx) error {
-	employees, err := ec.eu.GetAllEmployees()
+	employeesRes, err := ec.eu.GetAllEmployees()
 	if err != nil {
 		return c.Status(http.StatusInternalServerError).JSON(err.Error())
 	}
 
-	return c.Status(http.StatusOK).JSON(employees)
+	return c.Status(http.StatusOK).JSON(employeesRes)
 }
