@@ -7,6 +7,7 @@ import (
 
 type DepartmentUsecase interface {
 	GetAllDepartments() ([]model.DepartmentResponse, error)
+	GetDepartmentById(id uint) (model.DepartmentDetailResponse, error)
 }
 
 type departmentUsecase struct {
@@ -34,4 +35,32 @@ func (du *departmentUsecase) GetAllDepartments() ([]model.DepartmentResponse, er
 	}
 
 	return departmentsRes, nil
+}
+
+func (du *departmentUsecase) GetDepartmentById(id uint) (model.DepartmentDetailResponse, error) {
+	department := model.Department{}
+
+	if err := du.dr.GetDepartmentById(&department, id); err != nil {
+		return model.DepartmentDetailResponse{}, err
+	}
+
+	departmentRes := model.DepartmentDetailResponse{
+		ID:          department.ID,
+		Name:        department.Name,
+		Description: department.Description,
+		CreatedAt:   department.CreatedAt,
+		UpdatedAt:   department.UpdatedAt,
+		Employees:   make([]model.EmployeeResponse, len(department.Employees)),
+	}
+	for ei, ev := range department.Employees {
+		departmentRes.Employees[ei] = model.EmployeeResponse{
+			ID:           ev.ID,
+			FirstName:    ev.FirstName,
+			LastName:     ev.LastName,
+			Birthday:     ev.Birthday,
+			DepartmentID: ev.DepartmentID,
+		}
+	}
+
+	return departmentRes, nil
 }

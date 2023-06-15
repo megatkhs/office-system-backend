@@ -14,7 +14,7 @@ func Setup(app *bootstrap.App, fiberApp *fiber.App) {
 	api := fiberApp.Group("/api")
 	v1 := api.Group("/v1")
 
-	api.Use(newLogger)
+	api.Use(newLogger())
 
 	setupEmployeeRoutes(app.DB, v1)
 	setupDepartmentRoutes(app.DB, v1)

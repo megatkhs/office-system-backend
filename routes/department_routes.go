@@ -17,4 +17,5 @@ func setupDepartmentRoutes(db *gorm.DB, router fiber.Router) {
 	dc := controller.NewDepartmentController(du)
 
 	department.Get("/", dc.GetAllDepartments)
+	department.Get("/:departmentId", dc.GetDepartmentById)
 }
