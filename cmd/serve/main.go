@@ -13,10 +13,10 @@ func main() {
 	app := bootstrap.NewApp()
 	defer app.CloseDB()
 
-	fiber := fiber.New()
+	f := fiber.New()
 
-	routes.Setup(app, fiber)
+	routes.Setup(app, f)
 
 	p := fmt.Sprintf(":%s", app.Env.APIPort)
-	logger.Fatal("APIサーバーを起動しました", fiber.Listen(p))
+	logger.Fatal("APIサーバーを起動しました", f.Listen(p))
 }
