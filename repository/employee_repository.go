@@ -8,6 +8,7 @@ import (
 
 type EmployeeRepository interface {
 	GetAllEmployees(employees *[]model.Employee) error
+	GetEmployeeById(employee *model.Employee, id uint) error
 }
 
 type employeeRepository struct {
@@ -19,6 +20,11 @@ func NewEmployeeRepository(db *gorm.DB) EmployeeRepository {
 }
 
 func (er *employeeRepository) GetAllEmployees(employees *[]model.Employee) error {
-	err := er.db.Model(&model.Employee{}).Preload("Contacts").Find(employees).Error
+	err := er.db.Model(&model.Employee{}).Find(employees).Error
+	return err
+}
+
+func (er *employeeRepository) GetEmployeeById(employee *model.Employee, id uint) error {
+	err := er.db.Preload("Contacts").First(employee, id).Error
 	return err
 }

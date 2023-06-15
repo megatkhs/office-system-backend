@@ -7,6 +7,7 @@ import (
 
 type EmployeeUsecase interface {
 	GetAllEmployees() ([]model.EmployeeResponse, error)
+	GetEmployeeById(id uint) (model.EmployeeDetailResponse, error)
 }
 
 type employeeUsecase struct {
@@ -32,19 +33,36 @@ func (eu *employeeUsecase) GetAllEmployees() ([]model.EmployeeResponse, error) {
 			LastName:     v.LastName,
 			Birthday:     v.Birthday,
 			DepartmentID: v.DepartmentID,
-			CreatedAt:    v.CreatedAt,
-			UpdatedAt:    v.UpdatedAt,
-			Contacts:     make([]model.ContactResponse, len(v.Contacts)),
-		}
-
-		for ci, cv := range v.Contacts {
-			employeesRes[i].Contacts[ci] = model.ContactResponse{
-				Label: cv.Label,
-				Value: cv.Value,
-				Type:  cv.Type,
-			}
 		}
 	}
 
 	return employeesRes, nil
+}
+
+func (eu *employeeUsecase) GetEmployeeById(id uint) (model.EmployeeDetailResponse, error) {
+	employee := model.Employee{}
+
+	if err := eu.er.GetEmployeeById(&employee, id); err != nil {
+		return model.EmployeeDetailResponse{}, err
+	}
+
+	employeeRes := model.EmployeeDetailResponse{
+		ID:           employee.ID,
+		FirstName:    employee.FirstName,
+		LastName:     employee.LastName,
+		Birthday:     employee.Birthday,
+		DepartmentID: employee.DepartmentID,
+		CreatedAt:    employee.CreatedAt,
+		UpdatedAt:    employee.UpdatedAt,
+		Contacts:     make([]model.ContactResponse, len(employee.Contacts)),
+	}
+	for ci, cv := range employee.Contacts {
+		employeeRes.Contacts[ci] = model.ContactResponse{
+			Label: cv.Label,
+			Value: cv.Value,
+			Type:  cv.Type,
+		}
+	}
+
+	return employeeRes, nil
 }

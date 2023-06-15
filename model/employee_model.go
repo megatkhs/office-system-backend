@@ -16,6 +16,14 @@ type Employee struct {
 }
 
 type EmployeeResponse struct {
+	ID           uint   `json:"id"`
+	FirstName    string `json:"first_name"`
+	LastName     string `json:"last_name"`
+	Birthday     string `json:"birthday"`
+	DepartmentID uint   `json:"department_id"`
+}
+
+type EmployeeDetailResponse struct {
 	ID           uint              `json:"id"`
 	FirstName    string            `json:"first_name"`
 	LastName     string            `json:"last_name"`

@@ -17,4 +17,5 @@ func setupEmployeeRoutes(db *gorm.DB, router fiber.Router) {
 	ec := controller.NewEmployeeController(eu)
 
 	employee.Get("/", ec.GetAllEmployees)
+	employee.Get("/:employeeId", ec.GetEmployeeById)
 }
