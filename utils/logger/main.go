@@ -4,12 +4,14 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strconv"
 	"time"
 
 	"golang.org/x/exp/slog"
 )
 
 var logger *slog.Logger
+var pid string
 
 func Initialize() {
 	fileName := fmt.Sprintf("logs/log_%s.log", time.Now().Format("20060102"))
@@ -20,25 +22,27 @@ func Initialize() {
 		Level: slog.LevelDebug,
 	})
 	logger = slog.New(h)
+
+	pid = strconv.Itoa(os.Getpid())
 }
 
 func Debug(msg string, fields ...slog.Attr) {
-	logger.Debug(msg, "payload", slog.GroupValue(fields...))
+	logger.Debug(msg, "pid", pid, "payload", slog.GroupValue(fields...))
 }
 
 func Info(msg string, fields ...slog.Attr) {
-	logger.Info(msg, "payload", slog.GroupValue(fields...))
+	logger.Info(msg, "pid", pid, "payload", slog.GroupValue(fields...))
 }
 
 func Warn(msg string, fields ...slog.Attr) {
-	logger.Warn(msg, "payload", slog.GroupValue(fields...))
+	logger.Warn(msg, "pid", pid, "payload", slog.GroupValue(fields...))
 }
 
 func Error(msg string, err error) {
-	logger.Error(msg, err)
+	logger.Error(msg, "pid", pid, err)
 }
 
 func Fatal(msg string, err error) {
-	logger.Error(msg, err)
+	Error(msg, err)
 	os.Exit(1)
 }
