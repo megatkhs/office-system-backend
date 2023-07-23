@@ -2,6 +2,7 @@ package model
 
 import "gorm.io/gorm"
 
+// 連絡先情報 テーブルモデル
 type Contact struct {
 	gorm.Model
 	Label      string `gorm:"comment:連絡先ラベル"`
@@ -10,6 +11,7 @@ type Contact struct {
 	EmployeeID uint   `gorm:"comment:連絡先を紐づける従業員ID"`
 }
 
+// 連絡先情報 レスポンスデータ
 type ContactResponse struct {
 	Label string `json:"label"`
 	Value string `json:"value"`

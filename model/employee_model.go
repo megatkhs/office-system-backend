@@ -6,6 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// 従業員 テーブルモデル
 type Employee struct {
 	gorm.Model
 	LastName     string    `gorm:"comment:名字"`
@@ -15,18 +16,20 @@ type Employee struct {
 	Contacts     []Contact `gorm:"comment:連絡先"`
 }
 
+// 従業員 一覧レスポンスデータ
 type EmployeeResponse struct {
 	ID           uint   `json:"id"`
-	FirstName    string `json:"first_name"`
 	LastName     string `json:"last_name"`
+	FirstName    string `json:"first_name"`
 	Birthday     string `json:"birthday"`
 	DepartmentID uint   `json:"department_id"`
 }
 
+// 従業員 詳細レスポンスデータ
 type EmployeeDetailResponse struct {
 	ID           uint              `json:"id"`
-	FirstName    string            `json:"first_name"`
 	LastName     string            `json:"last_name"`
+	FirstName    string            `json:"first_name"`
 	Birthday     string            `json:"birthday"`
 	DepartmentID uint              `json:"department_id"`
 	CreatedAt    time.Time         `json:"created_at"`
