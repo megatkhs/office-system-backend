@@ -10,7 +10,7 @@ import (
 )
 
 func setupEmployeeRoutes(db *gorm.DB, router fiber.Router) {
-	employee := router.Group("/employee")
+	employee := router.Group("/employees")
 
 	er := repository.NewEmployeeRepository(db)
 	eu := usecase.NewEmployeeUsecase(er)

@@ -10,7 +10,7 @@ import (
 )
 
 func setupDepartmentRoutes(db *gorm.DB, router fiber.Router) {
-	department := router.Group("/department")
+	department := router.Group("/departments")
 
 	dr := repository.NewDepartmentRepository(db)
 	du := usecase.NewDepartmentUsecase(dr)
