@@ -7,6 +7,7 @@ import (
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func main() {
@@ -14,6 +15,8 @@ func main() {
 	defer app.CloseDB()
 
 	f := fiber.New()
+
+	f.Use(cors.New())
 
 	routes.Setup(app, f)
 
